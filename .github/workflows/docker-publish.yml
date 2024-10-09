@@ -1,0 +1,41 @@
+name: Docker Build and Push to AWS ECR
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 检出代码
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 登录 AWS ECR
+      - name: Login to AWS ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          region: ap-southeast-2  # 修改为你使用的区域
+          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      # 获取 ECR 登录信息
+      - name: Configure Docker with AWS ECR credentials
+        run: |
+          aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 418272795158.dkr.ecr.ap-southeast-2.amazonaws.com
+
+      # 构建 Docker 镜像
+      - name: Build the Docker image
+        run: docker build -t expensetraker .
+
+      # 标记镜像
+      - name: Tag the Docker image
+        run: docker tag expensetraker:latest 418272795158.dkr.ecr.ap-southeast-2.amazonaws.com/expensetraker:latest
+
+      # 推送镜像到 AWS ECR
+      - name: Push to AWS ECR
+        run: docker push 418272795158.dkr.ecr.ap-southeast-2.amazonaws.com/expensetraker:latest
