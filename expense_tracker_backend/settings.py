@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'transactions',
     'rest_framework.authtoken',
+    'expense_tracker_backend',
 ]
 
 MIDDLEWARE = [
