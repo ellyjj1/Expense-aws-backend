@@ -166,7 +166,7 @@ APPEND_SLASH = True
 
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://*.azurewebsites.net/, http://127.0.0.1',
+    'https://*.azurewebsites.net/, http://127.0.0.1' , 'https://*.amplifyapp.com', http://54.206.71.113 , https://54.206.71.113,
 ]
 
 
